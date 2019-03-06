@@ -8,10 +8,5 @@ CREATE MATERIALIZED VIEW all_courses_passed(StudentId, degreeId, CourseId, grade
      ORDER BY StudentId, DegreeId
 );
 
-CREATE MATERIALIZED VIEW high_gpa(StudentRegistrationId, avg_grade) AS
-(
-    SELECT StudentRegistrationId, avg(Grade)
-      FROM CourseRegistrations
-    GROUP BY StudentRegistrationId
-    HAVING min(Grade) > 4 AND avg(Grade) >= 9.0
-);
+CREATE INDEX acp_studentid_degreeid ON all_courses_passed(StudentId, DegreeId);
+
