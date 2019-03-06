@@ -1,5 +1,11 @@
-CREATE MATERIALIZED VIEW all_courses_passed(StudentRegistrationId, CourseId, StudentId, degreeId, grade) AS (SELECT srtd.StudentRegistrationId, co.CourseId, srtd.StudentId, srtd.degreeId, cr.grade	FROM CourseRegistrations as cr JOIN CourseOffers as co ON cr.CourseOfferId = co.CourseOfferId JOIN StudentRegistrationsToDegrees as srtd ON cr.StudentRegistrationId = srtd.StudentRegistrationId WHERE cr.grade > 4);
-CREATE INDEX apc_sId_dId_g ON all_courses_passed(StudentId, degreeId, grade);
-CREATE MATERIALIZED VIEW cr_with_gpa(StudentId, degreeId, avg_Grade, sum_ECTS) AS (SELECT acp.StudentId, acp.degreeId, avg(Grade), sum(ECTS) FROM all_courses_passed as acp JOIN Courses as c ON acp.CourseId = c.CourseId	GROUP BY acp.StudentId, acp.degreeId);
-CREATE INDEX idx_cr_with_gpa_gpa ON cr_with_gpa(StudentId, degreeId, avg_Grade);
-CREATE INDEX idx_cr_with_gpa_sum_ECTS ON cr_with_gpa(StudentId, degreeId, sum_ECTS);
+CREATE MATERIALIZED VIEW all_courses_passed(StudentId, degreeId, CourseId, grade) AS
+(
+    SELECT co.CourseId, srtd.StudentId, srtd.degreeId, cr.grade
+      FROM CourseRegistrations as cr
+      JOIN CourseOffers as co ON cr.CourseOfferId = co.CourseOfferId
+      JOIN StudentRegistrationsToDegrees as srtd ON cr.StudentRegistrationId = srtd.StudentRegistrationId
+     WHERE cr.grade > 4
+     ORDER BY StudentId, DegreeId
+);
+
+CREATE INDEX acp ON (StudentId, degreeId, CourseId, grade);
