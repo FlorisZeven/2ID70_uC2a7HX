@@ -19,4 +19,37 @@ CREATE MATERIALIZED VIEW gpa_active_complete(StudentId, DegreeId, GPA, complete)
 );
 
 
+-- QUERY 6
+CREATE VIEW max_grades(CourseOfferId, Grade) AS (
 
+	SELECT CourseOfferId, max(Grade)
+	FROM all_courses_passed
+	GROUP BY CourseOfferId
+);
+
+CREATE VIEW ExcellentStudents2018Q1(StudentId) AS (
+
+	SELECT acp.Studentid
+	FROM
+		all_courses_passed AS acp
+		JOIN
+		max_grades
+		ON
+		acp.CourseOfferId = max_grades.CourseOfferId
+	WHERE acp.CourseOfferId
+		IN (
+			SELECT CourseOfferId
+			FROM
+				CourseOffers AS co
+			WHERE
+				Year = 2018 AND Quartile = 1
+		)
+		AND acp.Grade = max_grades.Grade
+);
+
+CREATE MATERIALIZED VIEW q6(StudentId, TimesExcelent) AS
+(
+    SELECT StudentId, COUNT(StudentId)
+    FROM ExcellentStudents2018Q1
+    GROUP BY StudentId
+);
