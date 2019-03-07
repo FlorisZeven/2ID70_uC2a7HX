@@ -2,18 +2,18 @@
 
 CREATE UNLOGGED TABLE Degrees(
 	 DegreeId smallint
-	,Dept char(50)
-	,DegreeDescription char(200)
+	,Dept varchar(50)
+	,DegreeDescription varchar(200)
 	,TotalECTS smallint
 	,CONSTRAINT degreeId_key PRIMARY KEY (DegreeId, TotalECTS)
 );
 
 CREATE UNLOGGED TABLE Students(
 	 StudentId int
-	,StudentName char(50)
-	,Address char(200)
+	,StudentName varchar(50)
+	,Address varchar(200)
 	,BirthyearStudent smallint
-	,Gender char(1)
+	,Gender varchar(1)
 	,CONSTRAINT studentid_key PRIMARY KEY (StudentId, Gender)
 );
 
@@ -27,17 +27,17 @@ CREATE UNLOGGED TABLE StudentRegistrationsToDegrees(
 
 CREATE UNLOGGED TABLE Teachers(
 	 TeacherId int
-	,TeacherName char(50)
-	,Address char(200)
+	,TeacherName varchar(50)
+	,Address varchar(200)
 	,BirthyearTeacher smallint
-	,Gender char(1)
+	,Gender varchar(1)
 	,CONSTRAINT teacherid_key PRIMARY KEY (TeacherId)
 );
 
 CREATE UNLOGGED TABLE Courses(
 	 CourseId int
-	,CourseName char(50)
-	,CourseDescription char(200)
+	,CourseName varchar(50)
+	,CourseDescription varchar(200)
 	,DegreeId int 
 	,ECTS smallint
 	,CONSTRAINT courseid_key PRIMARY KEY (CourseId, DegreeId, ECTS)
